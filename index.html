@@ -1,1 +1,589 @@
-...
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Helge & Torstein 2 x 60 år</title>
+
+<style>
+
+:root{
+    --bg:#f8f3ea;
+    --card:#ffffff;
+    --primary:#8b5e34;
+    --secondary:#d4a437;
+    --text:#4f3b28;
+    --menu:#f1e7d4;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    padding-bottom:90px;
+}
+
+.page{
+    display:none;
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
+
+.page.active{
+    display:block;
+}
+
+.hero{
+    text-align:center;
+    padding:40px 10px;
+}
+
+.hero h1{
+    color:var(--primary);
+    font-size:clamp(2rem,5vw,4rem);
+    margin-bottom:15px;
+}
+
+.hero .subtitle{
+    display:block;
+    margin-top:10px;
+    color:var(--secondary);
+    font-size:0.75em;
+}
+
+.hero p{
+    font-size:1.1rem;
+}
+
+.card{
+    background:var(--card);
+    padding:22px;
+    border-radius:18px;
+    margin-bottom:18px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.card h2{
+    color:var(--secondary);
+    margin-bottom:12px;
+}
+
+.highlight{
+    color:var(--primary);
+    font-weight:bold;
+    font-size:1.1rem;
+}
+
+input[type=text]{
+    width:100%;
+    padding:14px;
+    font-size:1rem;
+    border:1px solid #ddd;
+    border-radius:10px;
+    margin-bottom:15px;
+}
+
+button.action{
+    width:100%;
+    background:var(--secondary);
+    color:white;
+    border:none;
+    padding:14px;
+    border-radius:10px;
+    font-size:1rem;
+    cursor:pointer;
+}
+
+button.action:hover{
+    opacity:.9;
+}
+
+.participant{
+    background:#faf6ee;
+    border-left:4px solid var(--secondary);
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+iframe{
+    width:100%;
+    height:350px;
+    border:0;
+    border-radius:12px;
+}
+
+a{
+    color:var(--primary);
+}
+
+.cake-list label{
+    display:block;
+    padding:4px 0;
+}
+
+.disabled-cake{
+    color:#999;
+}
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:80px;
+    background:var(--menu);
+    border-top:1px solid #dcccae;
+    display:flex;
+    z-index:9999;
+}
+
+.bottom-nav button{
+    flex:1;
+    min-width:0;
+    border:none;
+    background:var(--menu);
+    color:var(--primary);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    padding:8px 2px;
+    gap:4px;
+}
+
+.bottom-nav button span:first-child{
+    font-size:1.25rem;
+}
+
+.bottom-nav button span:last-child{
+    font-size:.7rem;
+}
+
+.bottom-nav button.active{
+    background:#e7d4b3;
+    font-weight:bold;
+}
+
+button{
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+}
+
+@media(max-width:600px){
+
+    .hero{
+        padding:25px 10px;
+    }
+
+    iframe{
+        height:250px;
+    }
+
+    .bottom-nav button span:last-child{
+        font-size:.62rem;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<section class="page active" id="welcome">
+
+    <div class="hero">
+
+        <h1>
+            Helge & Torstein
+            <span class="subtitle">2 × 60 år</span>
+        </h1>
+
+        <p>En festaften inspirert av Vazelina Bilopphøggers</p>
+
+        <br>
+
+        <p class="highlight">
+            Fredag 23. oktober 2026 kl. 19.00
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>🎉 Velkommen</h2>
+
+        <p>
+            To karer fyller 60 år, og dette må feires skikkelig!
+        </p>
+
+        <br>
+
+        <p>
+            Vi inviterer til en hyggelig kveld med tapas,
+            godt drikke, Vazelina-stemning og masse godt selskap.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>📌 Viktig</h2>
+
+        <p>
+            <strong>Påmeldingsfrist:</strong>
+            Fredag 18. september 2026.
+        </p>
+
+    </div>
+
+</section>
+
+<section class="page" id="info">
+
+    <div class="card">
+
+        <h2>Praktisk informasjon</h2>
+
+        <p><strong>Dato:</strong> 23. oktober 2026</p>
+        <p><strong>Tid:</strong> 19.00</p>
+        <p><strong>Tema:</strong> Vazelina Bilopphøggers</p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Mat og drikke</h2>
+
+        <p>Tapas</p>
+        <p>Vin / øl / alkoholfritt</p>
+
+        <br>
+
+        <p>Gi beskjed om eventuelle matallergier i påmeldingen.</p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Gaver mottas ikke</h2>
+
+        <p>
+            ...men vi håper du tar med ditt gode humør.
+            Ta gjerne med en flaske vin eller noen gode øl
+            til vår felles bar.
+        </p>
+
+        <br>
+
+        <p>
+            Vi setter stor pris på korte underholdningsinnslag!
+            Gjerne historier, musikk eller andre kreative bidrag
+            i stedet for tradisjonelle taler. Det blir ikke toastmaster, men gi beskjed til Ida Margrethe eller Connie om innslag minst en uke før festen.
+        </p>
+
+        <br>
+
+        <p>
+            Vi setter også pris på om noen baker kaker.
+            Dette registreres i påmeldingen.
+        </p>
+
+    </div>
+
+    <div class="card">
+        <h2>Overnatting</h2>
+
+        <p>
+            Vi har fått avtalepris på Scandic Asker.
+        </p>
+
+        <br>
+
+        <p>
+            <strong>Pris:</strong> Enkeltrom 1095,-/dobbeltrom 1295,- (inkl. frokost)
+        </p>
+
+        <p>
+            Hotellet ligger i gangavstand fra festen.
+        </p>
+
+        <br>
+
+        <p>
+            Bestilling:
+            <a href="mailto:asker@scandichotels.com">
+                asker@scandichotels.com
+            </a>
+        </p>
+
+        <br>
+
+        <p>
+            Merk bestillingen med:
+            <strong>"Helge og Torstein 60 år"</strong>
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>Feststed</h2>
+        <p>Venskaben, Askerveien 41, 1384 ASKER </p>
+
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d562.578506585378!2d10.436860081972553!3d59.83582189229551!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sno!2sno!4v1786887186258!5m2!1sno!2sno"
+            loading="lazy">
+        </iframe>
+
+    </div>
+    
+</section>
+
+<section class="page" id="clothing">
+
+    <div class="card">
+
+        <h2>Antrekk</h2>
+
+        <p>
+            Det kan være alt fra en hatt, en øks på
+            bilopphøggerskjorta (ref. «Borghild»)
+            til fullt 50-tallsantrekk.
+        </p>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Inspirasjon</h2>
+
+        <p>
+            For de som ikke kjenner til Vazelina Bilopphøggers:
+            søk opp sangene på Spotify eller lignende,
+            og se på bilder for inspirasjon til antrekk.
+        </p>
+
+    </div>
+
+</section>
+
+<section class="page" id="signup">
+
+    <div class="card">
+
+        <h2>Påmelding</h2>
+
+        <input type="text" id="firstName" placeholder="Fornavn">
+
+        <input type="text" id="lastName" placeholder="Etternavn">
+
+        <input type="text" id="allergy" placeholder="Evt. matallergi">
+
+        <p><strong>Jeg kan bake en kake, kryss av nedenfor:</strong></p>
+
+        <br>
+
+        <div class="cake-list">
+
+            <label><input type="radio" name="cake" value="Ostekake"> Ostekake</label>
+            <label><input type="radio" name="cake" value="Sjokoladekake"> Sjokoladekake</label>
+            <label><input type="radio" name="cake" value="Gulrotkake"> Gulrotkake</label>
+            <label><input type="radio" name="cake" value="Kvæfjordkake"> Brownie</label>
+            <label><input type="radio" name="cake" value="Suksessterte"> Suksessterte</label>
+            <label><input type="radio" name="cake" value="Napoleonskake"> Eplekake</label>
+            <label><input type="radio" name="cake" value="Kransekake"> Bløtkake</label>
+            <label><input type="radio" name="cake" value="Bløtkake"> Glutenfri kake</label>
+            <label><input type="radio" name="cake" value="Eplekake"> Fritt valg</label>
+            <label><input type="radio" name="cake" value="Verdens Beste"> Fritt valg</label>
+
+        </div>
+
+        <br>
+
+        <button class="action" onclick="registerParticipant()">
+            Meld meg på
+        </button>
+
+    </div>
+
+</section>
+
+<section class="page" id="participants">
+
+    <div class="card">
+
+        <h2>👥 Påmeldte gjester</h2>
+
+        <div id="participantList"></div>
+
+    </div>
+
+</section>
+
+<nav class="bottom-nav">
+
+    <button class="active" onclick="showPage('welcome',this)">
+        <span>🏠</span>
+        <span>Velkommen</span>
+    </button>
+
+    <button onclick="showPage('info',this)">
+        <span>ℹ️</span>
+        <span>Info</span>
+    </button>
+
+    <button onclick="showPage('clothing',this)">
+        <span>👕</span>
+        <span>Antrekk</span>
+    </button>
+
+    <button onclick="showPage('signup',this)">
+        <span>✅</span>
+        <span>Påmelding</span>
+    </button>
+
+    <button onclick="showPage('participants',this)">
+        <span>👥</span>
+        <span>Deltakere</span>
+    </button>
+
+</nav>
+
+<script>
+
+function showPage(pageId, btn){
+
+    document.querySelectorAll('.page').forEach(function(page){
+        page.classList.remove('active');
+    });
+
+    const selectedPage=document.getElementById(pageId);
+
+    if(selectedPage){
+        selectedPage.classList.add('active');
+    }
+
+    document.querySelectorAll('.bottom-nav button')
+        .forEach(function(button){
+            button.classList.remove('active');
+        });
+
+    btn.classList.add('active');
+
+    loadParticipants();
+    updateCakeAvailability();
+
+    window.scrollTo({
+        top:0,
+        behavior:'smooth'
+    });
+}
+
+function registerParticipant(){
+
+    const first=document.getElementById('firstName').value.trim();
+    const last=document.getElementById('lastName').value.trim();
+    const allergy=document.getElementById('allergy').value.trim();
+
+    const selectedCake=
+        document.querySelector('input[name="cake"]:checked');
+
+    const cake=selectedCake ? selectedCake.value : "";
+
+    if(!first || !last){
+        alert('Fyll inn både fornavn og etternavn.');
+        return;
+    }
+
+    let participants=
+        JSON.parse(localStorage.getItem('participants')) || [];
+
+    participants.push({
+        first:first,
+        last:last,
+        allergy:allergy,
+        cake:cake
+    });
+
+    localStorage.setItem(
+        'participants',
+        JSON.stringify(participants)
+    );
+
+    alert('Takk for påmeldingen!');
+
+    document.getElementById('firstName').value='';
+    document.getElementById('lastName').value='';
+    document.getElementById('allergy').value='';
+
+    document.querySelectorAll('input[name="cake"]')
+        .forEach(c=>c.checked=false);
+
+    updateCakeAvailability();
+}
+
+function updateCakeAvailability(){
+
+    const participants=
+        JSON.parse(localStorage.getItem('participants')) || [];
+
+    const usedCakes=
+        participants
+            .filter(p=>p.cake)
+            .map(p=>p.cake);
+
+    document.querySelectorAll('input[name="cake"]')
+        .forEach(cake=>{
+
+            cake.disabled=false;
+            cake.parentElement.classList.remove('disabled-cake');
+
+            if(usedCakes.includes(cake.value)){
+                cake.disabled=true;
+                cake.parentElement.classList.add('disabled-cake');
+            }
+        });
+}
+
+function loadParticipants(){
+
+    const container=
+        document.getElementById('participantList');
+
+    const participants=
+        JSON.parse(localStorage.getItem('participants')) || [];
+
+    if(participants.length===0){
+        container.innerHTML='<p>Ingen påmeldte ennå.</p>';
+        return;
+    }
+
+    container.innerHTML=
+        participants.map(p=>`
+        <div class="participant">
+
+            <strong>${p.first} ${p.last}</strong>
+
+            ${p.allergy ? `<br><small>Matallergi: ${p.allergy}</small>` : ''}
+
+            ${p.cake ? `<br><small>Kake: ${p.cake}</small>` : ''}
+
+        </div>
+        `).join('');
+}
+
+updateCakeAvailability();
+loadParticipants();
+
+</script>
+
+</body>
+</html>
