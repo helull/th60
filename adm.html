@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Administrasjon - Helge & Torstein 2 x 60 år</title>
+
+<style>
+
+body{
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:#f8f3ea;
+    color:#4f3b28;
+    padding:20px;
+}
+
+h1{
+    color:#8b5e34;
+    margin-bottom:20px;
+}
+
+.card{
+    background:white;
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.summary{
+    margin-bottom:15px;
+    font-weight:bold;
+    color:#8b5e34;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#d4a437;
+    color:white;
+    padding:12px;
+    text-align:left;
+}
+
+td{
+    padding:10px;
+    border-bottom:1px solid #eee;
+}
+
+tr:nth-child(even){
+    background:#faf6ee;
+}
+
+.allergy{
+    color:#c0392b;
+}
+
+.cake{
+    color:#8b5e34;
+}
+
+</style>
+</head>
+<body>
+
+<h1>Administrasjon</h1>
+
+<div class="card">
+
+    <div class="summary" id="summary">
+        Laster ...
+    </div>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Matallergi</th>
+                <th>Kake</th>
+            </tr>
+        </thead>
+
+        <tbody id="guestTable">
+        </tbody>
+
+    </table>
+
+</div>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import {
+    getDatabase,
+    ref,
+    get
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBxWbDN_HyCuVe0jd6BQgRM0p08qdKhcKQ",
+    authDomain: "th60-f50e3.firebaseapp.com",
+    databaseURL: "https://th60-f50e3-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "th60-f50e3",
+    storageBucket: "th60-f50e3.firebasestorage.app",
+    messagingSenderId: "278322575307",
+    appId: "1:278322575307:web:22c3217f462444df54684e"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+async function loadGuests(){
+
+    const table =
+        document.getElementById("guestTable");
+
+    const summary =
+        document.getElementById("summary");
+
+    const snapshot =
+        await get(ref(db,"participants"));
+
+    if(!snapshot.exists()){
+
+        summary.textContent =
+            "Ingen påmeldte.";
+
+        return;
+    }
+
+    const data =
+        snapshot.val();
+
+    const participants = [];
+
+    Object.keys(data).forEach(key => {
+
+        participants.push(data[key]);
+
+    });
+
+    participants.sort((a,b) => {
+
+        const nameA =
+            `${a.last} ${a.first}`;
+
+        const nameB =
+            `${b.last} ${b.first}`;
+
+        return nameA.localeCompare(
+            nameB,
+            "no"
+        );
+    });
+
+    summary.innerHTML =
+        `Antall påmeldte: ${participants.length}`;
+
+    table.innerHTML =
+        participants.map(p => `
+
+        <tr>
+            <td>
+                <strong>
+                    ${p.first} ${p.last}
+                </strong>
+            </td>
+
+            <td class="allergy">
+                ${p.allergy || "-"}
+            </td>
+
+            <td class="cake">
+                ${p.cake || "-"}
+            </td>
+        </tr>
+
+        `).join('');
+}
+
+loadGuests();
+
+</script>
+
+</body>
+</html>
