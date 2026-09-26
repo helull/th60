@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Min Musikkportal</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #121212;
+    color: white;
+}
+
+h1 {
+    color: #1DB954;
+}
+
+.track {
+    background: #1e1e1e;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+button {
+    background: #1DB954;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+button:hover {
+    background: #25d366;
+}
+
+iframe {
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<h1>🎵 Min Musikkportal</h1>
+
+<div class="track">
+    <h2>Never Gonna Give You Up</h2>
+
+    <button onclick="openSpotify()">
+        Åpne i Spotify
+    </button>
+
+    <iframe
+        src="https://open.spotify.com/embed/track/C
+    </iframe>
+</div>
+
+<script>
+function openSpotify() {
+    window.open(
+        "https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC",
+        "_blank"
+    );
+}
+</script>
+
+</body>
+</html>
