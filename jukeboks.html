@@ -6,119 +6,114 @@
 <title>Spotify Jukeboks</title>
 
 <style>
-body{
+body {
+    margin: 0;
+    padding: 30px;
+    background: #121212;
+    color: white;
     font-family: Arial, sans-serif;
-    background:#121212;
-    color:white;
-    margin:0;
-    padding:30px;
 }
 
-h1{
-    text-align:center;
-    color:#1DB954;
+h1 {
+    text-align: center;
+    color: #1DB954;
 }
 
-#currentSong{
-    text-align:center;
-    margin-bottom:20px;
-    font-size:1.2em;
+#currentSong {
+    text-align: center;
+    font-size: 22px;
+    margin: 20px 0;
 }
 
-.jukebox{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:15px;
-    max-width:900px;
-    margin:auto;
+.jukebox {
+    max-width: 900px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 15px;
 }
 
-.song{
-    background:#1e1e1e;
-    padding:20px;
-    border-radius:10px;
-    cursor:pointer;
-    transition:0.2s;
+.song {
+    background: #1e1e1e;
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+    border: 2px solid transparent;
 }
 
-.song:hover{
-    background:#2c2c2c;
+.song:hover {
+    background: #2b2b2b;
+    transform: scale(1.03);
 }
 
-.song.active{
-    border:2px solid #1DB954;
+.song.active {
+    border-color: #1DB954;
 }
 
-.player{
-    margin-top:30px;
-    max-width:900px;
-    margin-left:auto;
-    margin-right:auto;
+.song h3 {
+    margin-top: 0;
 }
 
-iframe{
-    width:100%;
-    height:152px;
-    border:none;
-    border-radius:12px;
+.player {
+    max-width: 900px;
+    margin: 30px auto;
+}
+
+#spotifyPlayer {
+    width: 100%;
+    height: 152px;
+    border: none;
+    border-radius: 12px;
 }
 </style>
 </head>
+
 <body>
 
 <h1>🎵 Spotify Jukeboks</h1>
 
 <div id="currentSong">
-    Nå valgt: Never Gonna Give You Up
+Nå valgt: Never Gonna Give You Up
 </div>
 
 <div class="jukebox">
 
-    <div class="song active"
-         onclick="playTrack(this,
-         '4uLU6hMCjMI75M1A2tKUQC',
-         'Never Gonna Give You Up')">
-        <h3>Never Gonna Give You Up</h3>
-        <p>Rick Astley</p>
-    </div>
+<div class="song active"
+     onclick="playTrack(this,'4uLU6hMCjMI75M1A2tKUQC','Never Gonna Give You Up')">
+    <h3>Never Gonna Give You Up</h3>
+    <p>Rick Astley</p>
+</div>
 
-    <div class="song"
-         onclick="playTrack(this,
-         '0VjIjW4GlUZAMYd2vXMi3b',
-         'Blinding Lights')">
-        <h3>Blinding Lights</h3>
-        <p>The Weeknd</p>
-    </div>
+<div class="song"
+     onclick="playTrack(this,'0VjIjW4GlUZAMYd2vXMi3b','Blinding Lights')">
+    <h3>Blinding Lights</h3>
+    <p>The Weeknd</p>
+</div>
 
-    <div class="song"
-         onclick="playTrack(this,
-         '2takcwOaAZWiXQijPHIx7B',
-         'Take On Me')">
-        <h3>Take On Me</h3>
-        <p>A-ha</p>
-    </div>
+<div class="song"
+     onclick="playTrack(this,'2takcwOaAZWiXQijPHIx7B','Take On Me')">
+    <h3>Take On Me</h3>
+    <p>A-ha</p>
+</div>
 
 </div>
 
 <div class="player">
-    <iframe
-        id="spotifyPlayerack/4uLU6hMCjMI75M1A2tKUQC
-    </iframe>
-</div>
+<iframe
+    id="spotifyPlayer"
+    src="https://open.spotify.com/embed/track/4uLU6hMCjMI75M1A2tKUQC?utm_source=generator"
+    allow="autoplay; clipboard-write; encrypted-media; yId("spotifyPlayer").src =
+        "https://open.spotify.com/embed/track/" +
+        trackId +
+        "?utm_source=generator";
 
-<script>
-
-function playTrack(card, trackId, title)
-{
-    document.getElementById("spotifyPlayer").src =
-        "https://open.spotify.com/embed/track/" + trackId;
-
-    document.getElementById("currentSong").innerText =
+    document.getElementById("currentSong").textContent =
         "Nå valgt: " + title;
 
-    document.querySelectorAll(".song").forEach(
-        song => song.classList.remove("active")
-    );
+    document.querySelectorAll(".song").forEach(function(song){
+        song.classList.remove("active");
+    });
 
     card.classList.add("active");
 }
@@ -127,4 +122,3 @@ function playTrack(card, trackId, title)
 
 </body>
 </html>
-`
