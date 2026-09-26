@@ -2,25 +2,48 @@
 <html lang="no">
 <head>
 <meta charset="UTF-8">
-<title>Spotify Test</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Musikkportal</title>
+
 <style>
-.btn {
-    display: inline-block;
-    padding: 12px 20px;
-    background: #1DB954;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
+body{
+    background:#121212;
+    color:white;
+    font-family:Arial,sans-serif;
+    max-width:800px;
+    margin:40px auto;
+    padding:20px;
+}
+
+.song{
+    background:#1e1e1e;
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+iframe{
+    border-radius:12px;
 }
 </style>
 </head>
 <body>
 
-<a class="btn"
-   href="https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC"
-   target="_blank">
-   Åpne i Spotify
-</a>
+<h1>🎵 Min Musikkportal</h1>
+
+<div class="song">
+    <h2>Never Gonna Give You Up</h2>
+
+    https://open.spotify.com/embed/track/4uLU6hMCjMI75M1A2tKUQC
+    </iframe>
+</div>
+
+<div class="song">
+    <h2>Playlist-eksempel</h2>
+
+    https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M
+    </iframe>
+</div>
 
 </body>
 </html>
