@@ -3,133 +3,195 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spotify Jukeboks</title>
+
+<title>Jukeboks</title>
 
 <style>
-body {
-    background: #121212;
-    color: white;
-    font-family: Arial, sans-serif;
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
+
+*{
+    box-sizing:border-box;
 }
 
-h1 {
-    text-align: center;
-    color: #1DB954;
+body{
+    margin:0;
+    background:#111;
+    color:white;
+    font-family:Arial,sans-serif;
+    overflow:hidden;
 }
 
-#current {
-    text-align: center;
-    font-size: 20px;
-    margin-bottom: 20px;
+h1{
+    text-align:center;
+    margin:10px;
+    color:#ffd700;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
+#status{
+    text-align:center;
+    margin-bottom:10px;
+    font-size:20px;
 }
 
-.card {
-    background: #1e1e1e;
-    padding: 16px;
-    border-radius: 10px;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: 0.2s;
+.jukebox{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:12px;
+    padding:12px;
+    height:calc(100vh - 100px);
 }
 
-.card:hover {
-    background: #2a2a2a;
+.song{
+    position:relative;
+    border:none;
+    border-radius:15px;
+    color:white;
+    font-size:28px;
+    font-weight:bold;
+    cursor:pointer;
+    background:#303030;
+    min-height:220px;
+    overflow:hidden;
 }
 
-.card.active {
-    border-color: #1DB954;
+.song:hover{
+    transform:scale(1.02);
 }
 
-.card h3 {
-    margin-top: 0;
+.song::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    opacity:0;
+    background-size:cover;
+    background-position:center;
+    transition:0.3s;
 }
 
-iframe {
-    width: 100%;
-    height: 152px;
-    border: none;
-    border-radius: 12px;
-    margin-top: 20px;
+.song.active::before{
+    opacity:0.45;
 }
+
+.song span{
+    position:relative;
+    z-index:2;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100%;
+    text-shadow:2px 2px 5px black;
+}
+
 </style>
 </head>
-
 <body>
 
-<h1>🎵 Spotify Jukeboks</h1>
+<h1>🎵 Jukeboks</h1>
 
-<div id="current">
-    Nå valgt: Never Gonna Give You Up
+<div id="status">
+Velg en sang
 </div>
 
-<div class="grid">
+<div class="jukebox">
 
-    <div class="card active"
-         data-id="4uLU6hMCjMI75M1A2tKUQC"
-         data-title="Never Gonna Give You Up">
-        <h3>Never Gonna Give You Up</h3>
-        <p>Rick Astley</p>
-    </div>
+<button class="song"
+        data-song="sang1.mp3"
+        data-cover="sang1.jpg">
+    <span>Sang 1</span>
+</button>
 
-    <div class="card"
-         data-id="0VjIjW4GlUZAMYd2vXMi3b"
-         data-title="Blinding Lights">
-        <h3>Blinding Lights</h3>
-        <p>The Weeknd</p>
-    </div>
+<button class="song"
+        data-song="sang2.mp3"
+        data-cover="sang2.jpg">
+    <span>Sang 2</span>
+</button>
 
-    <div class="card"
-         data-id="2takcwOaAZWiXQijPHIx7B"
-         data-title="Take On Me">
-        <h3>Take On Me</h3>
-        <p>A-ha</p>
-    </div>
+<button class="song"
+        data-song="sang3.mp3"
+        data-cover="sang3.jpg">
+    <span>Sang 3</span>
+</button>
 
 </div>
 
-<iframe
-    src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M"
-    width="100%"
-    height="352"
-    frameborder="0"
-    allowfullscreen=""
-    allow="autoplay; clipboard-write; encrypted-media">
-</iframe>
-    
 <script>
 
-const cards = document.querySelectorAll(".card");
-const player = document.getElementById("spotifyPlayer");
-const current = document.getElementById("current");
+const waitingSong = "ventesang.mp3";
 
-cards.forEach(card => {
+const player = new Audio();
+const waitingPlayer = new Audio(waitingSong);
 
-    card.addEventListener("click", () => {
+waitingPlayer.loop = true;
 
-        const trackId = card.dataset.id;
-        const title = card.dataset.title;
+function startWaitingSong()
+{
+    player.pause();
 
-        player.src =
-            "https://open.spotify.com/embed/track/" + trackId;
+    waitingPlayer.currentTime = 0;
+    waitingPlayer.play();
 
-        current.textContent =
-            "Nå valgt: " + title;
+    document.getElementById("status").innerText =
+        "Ventesang spiller";
+}
 
-        cards.forEach(c => c.classList.remove("active"));
+function playSong(songFile, coverFile, button)
+{
+    waitingPlayer.pause();
 
-        card.classList.add("active");
+    player.pause();
+    player.currentTime = 0;
+
+    player.src = songFile;
+    player.play();
+
+    document.getElementById("status").innerText =
+        songFile;
+
+    document
+        .querySelectorAll(".song")
+        .forEach(btn => btn.classList.remove("active"));
+
+    button.classList.add("active");
+
+    button.style.setProperty(
+        "--cover",
+        `url(${coverFile})`
+    );
+
+    button.style.backgroundImage =
+        `url(${coverFile})`;
+
+    button.style.backgroundSize =
+        "cover";
+
+    button.style.backgroundPosition =
+        "center";
+}
+
+document
+.querySelectorAll(".song")
+.forEach(button =>
+{
+    button.addEventListener("click", () =>
+    {
+        playSong(
+            button.dataset.song,
+            button.dataset.cover,
+            button
+        );
     });
-
 });
+
+player.addEventListener("ended", () =>
+{
+    document
+        .querySelectorAll(".song")
+        .forEach(btn =>
+            btn.classList.remove("active"));
+
+    startWaitingSong();
+});
+
+startWaitingSong();
 
 </script>
 
