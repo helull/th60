@@ -14,113 +14,116 @@
 
 body{
     margin:0;
+    height:100vh;
+    overflow:hidden;
     background:#111;
     color:white;
     font-family:Arial,sans-serif;
-    overflow:hidden;
+
+    display:grid;
+    grid-template-columns:1fr 300px 1fr;
 }
 
-h1{
-    text-align:center;
-    margin:10px;
-    color:#ffd700;
+#leftPanel,
+#rightPanel{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    padding:10px;
+}
+
+#centerPanel{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+#cover{
+    width:260px;
+    height:260px;
+    border-radius:20px;
+    background-size:cover;
+    background-position:center;
+    background-image:url('ventesang.jpg');
+
+    box-shadow:0 0 25px rgba(255,255,255,.25);
 }
 
 #status{
+    margin-top:20px;
     text-align:center;
-    margin-bottom:10px;
-    font-size:20px;
-}
-
-.jukebox{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:12px;
-    padding:12px;
-    height:calc(100vh - 100px);
+    font-size:24px;
 }
 
 .song{
-    position:relative;
     border:none;
     border-radius:15px;
+
+    background:#2a2a2a;
     color:white;
-    font-size:28px;
+
+    font-size:22px;
     font-weight:bold;
+
     cursor:pointer;
-    background:#303030;
-    min-height:220px;
-    overflow:hidden;
+
+    transition:.2s;
 }
 
 .song:hover{
-    transform:scale(1.02);
+    background:#444;
 }
 
-.song::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    opacity:0;
-    background-size:cover;
-    background-position:center;
-    transition:0.3s;
-}
-
-.song.active::before{
-    opacity:0.45;
-}
-
-.song span{
-    position:relative;
-    z-index:2;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100%;
-    text-shadow:2px 2px 5px black;
+.song.active{
+    background:#0d8f3f;
 }
 
 </style>
 </head>
+
 <body>
 
-<h1>🎵 Jukeboks</h1>
+<div id="leftPanel"></div>
 
-<div id="status">
-Velg en sang
-</div>
+<div id="centerPanel">
 
-<div class="jukebox">
+    <div id="cover"></div>
 
-<button class="song"
-        data-song="sang1.mp3"
-        data-cover="sang1.jpg">
-    <span>Sang 1</span>
-</button>
-
-<button class="song"
-        data-song="sang2.mp3"
-        data-cover="sang2.jpg">
-    <span>Sang 2</span>
-</button>
-
-<button class="song"
-        data-song="sang3.mp3"
-        data-cover="sang3.jpg">
-    <span>Sang 3</span>
-</button>
+    <div id="status">
+        Ventesang spiller
+    </div>
 
 </div>
+
+<div id="rightPanel"></div>
 
 <script>
 
-const waitingSong = "ventesang.mp3";
+const waitingSong  = "ventesang.mp3";
+const waitingCover = "ventesang.jpg";
 
 const player = new Audio();
 const waitingPlayer = new Audio(waitingSong);
 
 waitingPlayer.loop = true;
+
+const cover  = document.getElementById("cover");
+const status = document.getElementById("status");
+
+function setCover(image)
+{
+    cover.style.backgroundImage =
+        `url('${image}')`;
+}
+
+function clearSelection()
+{
+    document
+        .querySelectorAll(".song")
+        .forEach(btn =>
+            btn.classList.remove("active"));
+}
 
 function startWaitingSong()
 {
@@ -129,67 +132,102 @@ function startWaitingSong()
     waitingPlayer.currentTime = 0;
     waitingPlayer.play();
 
-    document.getElementById("status").innerText =
+    setCover(waitingCover);
+
+    status.textContent =
         "Ventesang spiller";
+
+    clearSelection();
 }
 
-function playSong(songFile, coverFile, button)
+function playSong(songNumber)
 {
     waitingPlayer.pause();
 
     player.pause();
     player.currentTime = 0;
 
-    player.src = songFile;
+    player.src =
+        `sang${songNumber}.mp3`;
+
     player.play();
 
-    document.getElementById("status").innerText =
-        songFile;
-
-    document
-        .querySelectorAll(".song")
-        .forEach(btn => btn.classList.remove("active"));
-
-    button.classList.add("active");
-
-    button.style.setProperty(
-        "--cover",
-        `url(${coverFile})`
+    setCover(
+        `sang${songNumber}.jpg`
     );
 
-    button.style.backgroundImage =
-        `url(${coverFile})`;
+    status.textContent =
+        `Sang ${songNumber}`;
 
-    button.style.backgroundSize =
-        "cover";
+    clearSelection();
 
-    button.style.backgroundPosition =
-        "center";
+    document
+        .getElementById(
+            "song"+songNumber
+        )
+        .classList.add(
+            "active"
+        );
 }
 
-document
-.querySelectorAll(".song")
-.forEach(button =>
+player.addEventListener(
+    "ended",
+    startWaitingSong
+);
+
+const leftPanel =
+    document.getElementById(
+        "leftPanel"
+    );
+
+const rightPanel =
+    document.getElementById(
+        "rightPanel"
+    );
+
+for(let i=1;i<=10;i++)
 {
-    button.addEventListener("click", () =>
-    {
-        playSong(
-            button.dataset.song,
-            button.dataset.cover,
-            button
+    const btn =
+        document.createElement(
+            "button"
         );
-    });
-});
 
-player.addEventListener("ended", () =>
+    btn.className =
+        "song";
+
+    btn.id =
+        "song"+i;
+
+    btn.textContent =
+        "Sang "+i;
+
+    btn.onclick =
+        () => playSong(i);
+
+    leftPanel.appendChild(btn);
+}
+
+for(let i=11;i<=20;i++)
 {
-    document
-        .querySelectorAll(".song")
-        .forEach(btn =>
-            btn.classList.remove("active"));
+    const btn =
+        document.createElement(
+            "button"
+        );
 
-    startWaitingSong();
-});
+    btn.className =
+        "song";
+
+    btn.id =
+        "song"+i;
+
+    btn.textContent =
+        "Sang "+i;
+
+    btn.onclick =
+        () => playSong(i);
+
+    rightPanel.appendChild(btn);
+}
 
 startWaitingSong();
 
