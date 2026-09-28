@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Låst Teksteditor</title>
+
+<style>
+
+html, body{
+    margin:0;
+    height:100%;
+    overflow:hidden;
+    background:#111;
+    color:white;
+    font-family:Segoe UI, sans-serif;
+}
+
+#toolbar{
+    height:50px;
+    background:#222;
+    display:flex;
+    align-items:center;
+    padding:0 15px;
+    gap:10px;
+}
+
+button{
+    padding:8px 14px;
+    cursor:pointer;
+}
+
+#editor{
+    width:100%;
+    height:calc(100% - 50px);
+    resize:none;
+    border:none;
+    outline:none;
+    box-sizing:border-box;
+    padding:20px;
+    font-size:20px;
+    background:#111;
+    color:#fff;
+}
+
+#warning{
+    position:fixed;
+    top:10px;
+    right:10px;
+    background:#c00;
+    color:white;
+    padding:10px;
+    border-radius:5px;
+    display:none;
+    z-index:1000;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="toolbar">
+    <button id="fullscreenBtn">Fullskjerm</button>
+    <span>Teksteditor</span>
+</div>
+
+<textarea id="editor" autofocus></textarea>
+
+<div id="warning">
+    Fullskjerm gjenopprettes...
+</div>
+
+<script>
+
+const warning = document.getElementById("warning");
+
+async function enterFullscreen(){
+
+    try{
+        if(!document.fullscreenElement){
+            await document.documentElement.requestFullscreen();
+        }
+    }
+    catch(e){
+        console.log(e);
+    }
+
+}
+
+window.addEventListener("load", () => {
+
+    setTimeout(() => {
+        enterFullscreen();
+    }, 500);
+
+});
+
+document
+.getElementById("fullscreenBtn")
+.addEventListener("click", enterFullscreen);
+
+document.addEventListener("fullscreenchange", () => {
+
+    if(!document.fullscreenElement){
+
+        warning.style.display = "block";
+
+        setTimeout(() => {
+            enterFullscreen();
+        }, 200);
+
+        setTimeout(() => {
+            warning.style.display = "none";
+        }, 2000);
+
+    }
+
+});
+
+document.addEventListener("keydown", function(e){
+
+    const k = e.key.toLowerCase();
+
+    if(e.key === "F12"){
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    if(e.key === "Escape"){
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    if(e.ctrlKey && e.shiftKey && k === "i"){
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    if(e.ctrlKey && e.shiftKey && k === "j"){
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    if(e.ctrlKey && e.shiftKey && k === "c"){
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    if(e.ctrlKey && k === "u"){
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    if(e.ctrlKey && k === "s"){
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    if(e.ctrlKey && k === "o"){
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    if(e.ctrlKey && k === "p"){
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+});
+
+document.addEventListener("contextmenu", function(e){
+    e.preventDefault();
+});
+
+window.addEventListener("beforeunload", function(e){
+    e.preventDefault();
+    e.returnValue = "";
+});
+
+document.body.addEventListener("click", async () => {
+
+    try{
+        document.body.requestPointerLock();
+    }
+    catch(e){}
+
+});
+
+document.addEventListener("pointerlockchange", () => {
+
+    if(document.pointerLockElement === null){
+
+        try{
+            document.body.requestPointerLock();
+        }
+        catch(e){}
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
