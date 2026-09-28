@@ -133,6 +133,29 @@ body{
 
 <script>
 
+const songTitles = [
+    "Borghild",
+    "Feil sie ta Mjøsa",
+    "Musikk tel arbe'",
+    "Gi meg fri i kveld",
+    "Skinnmagre høner",
+    "På magan bak en sten",
+    "Surfbrett",
+    "På Gjøvik",
+    "Knekkebrød",
+    "Vond rygg, såre knoker",
+    "Ågot Stang",
+    "Blå lys",
+    "Bomull i øra",
+    "Traktor med henger",
+    "Ferje på Mjøsa",
+    "Lada tel Hønefoss",
+    "Spikre paller",
+    "11 år uten kvinnfolk",
+    "To par gebiss",
+    "Dorull"
+];
+    
 const waitingSong  = "ventesang.mp3";
 const waitingCover = "ventesang.jpg";
 
@@ -222,7 +245,7 @@ function playSong(songNumber)
     );
 
     status.textContent =
-        `Sang ${songNumber}`;
+        songTitles[songNumber - 1];
 
     clearSelection();
 
