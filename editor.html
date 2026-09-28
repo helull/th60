@@ -8,52 +8,75 @@
 
 <style>
 
-html, body{
+html,body{
     margin:0;
+    padding:0;
     height:100%;
-    overflow:hidden;
     background:#111;
     color:white;
-    font-family:Segoe UI, sans-serif;
+    overflow:hidden;
+    font-family:Segoe UI, Arial, sans-serif;
 }
 
 #toolbar{
-    height:50px;
+    height:55px;
     background:#222;
     display:flex;
     align-items:center;
-    padding:0 15px;
     gap:10px;
-}
-
-button{
-    padding:8px 14px;
-    cursor:pointer;
+    padding:0 15px;
+    box-sizing:border-box;
 }
 
 #editor{
     width:100%;
-    height:calc(100% - 50px);
-    resize:none;
+    height:calc(100% - 55px);
+    background:#111;
+    color:white;
     border:none;
     outline:none;
-    box-sizing:border-box;
+    resize:none;
     padding:20px;
-    font-size:20px;
-    background:#111;
-    color:#fff;
+    font-size:22px;
+    box-sizing:border-box;
 }
 
-#warning{
+button{
+    padding:8px 16px;
+    cursor:pointer;
+}
+
+#overlay{
     position:fixed;
-    top:10px;
-    right:10px;
-    background:#c00;
-    color:white;
-    padding:10px;
-    border-radius:5px;
+    inset:0;
+    background:rgba(0,0,0,.85);
     display:none;
-    z-index:1000;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+#dialog{
+    background:#222;
+    padding:30px;
+    border-radius:10px;
+    min-width:300px;
+}
+
+#dialog h2{
+    margin-top:0;
+}
+
+#password{
+    width:100%;
+    padding:10px;
+    font-size:18px;
+    box-sizing:border-box;
+}
+
+#msg{
+    color:#ff8080;
+    margin-top:10px;
 }
 
 </style>
@@ -62,144 +85,231 @@ button{
 <body>
 
 <div id="toolbar">
-    <button id="fullscreenBtn">Fullskjerm</button>
-    <span>Teksteditor</span>
+    <button id="fsBtn">
+        Fullskjerm
+    </button>
+
+    <span>
+        Teksteditor
+    </span>
 </div>
 
-<textarea id="editor" autofocus></textarea>
+<textarea id="editor"></textarea>
 
-<div id="warning">
-    Fullskjerm gjenopprettes...
+<div id="overlay">
+
+    <div id="dialog">
+
+        <h2>Forlat fullskjerm?</h2>
+
+        <p>
+            Skriv passord for å avslutte.
+        </p>
+
+        <input
+            id="password"
+            type="password"
+            autocomplete="off">
+
+        <br><br>
+
+        <button onclick="checkPassword()">
+            OK
+        </button>
+
+        <div id="msg"></div>
+
+    </div>
+
 </div>
 
 <script>
 
-const warning = document.getElementById("warning");
+const PASSWORD = "1234";
 
-async function enterFullscreen(){
+const editor = document.getElementById("editor");
+const overlay = document.getElementById("overlay");
+const passwordBox = document.getElementById("password");
+const msg = document.getElementById("msg");
 
-    try{
-        if(!document.fullscreenElement){
-            await document.documentElement.requestFullscreen();
-        }
+let allowExit = false;
+
+function saveText() {
+    localStorage.setItem(
+        "editor_text",
+        editor.value
+    );
+}
+
+function loadText() {
+
+    const text =
+        localStorage.getItem(
+            "editor_text"
+        );
+
+    if(text){
+        editor.value = text;
     }
-    catch(e){
-        console.log(e);
+}
+
+editor.addEventListener(
+    "input",
+    saveText
+);
+
+loadText();
+
+async function enterFullscreen() {
+
+    try {
+
+        if (!document.fullscreenElement) {
+
+            await document
+                .documentElement
+                .requestFullscreen();
+
+        }
+
+    }
+    catch(err){
+        console.log(err);
     }
 
 }
 
-window.addEventListener("load", () => {
-
-    setTimeout(() => {
-        enterFullscreen();
-    }, 500);
-
-});
-
 document
-.getElementById("fullscreenBtn")
-.addEventListener("click", enterFullscreen);
+.getElementById("fsBtn")
+.addEventListener(
+    "click",
+    enterFullscreen
+);
 
-document.addEventListener("fullscreenchange", () => {
-
-    if(!document.fullscreenElement){
-
-        warning.style.display = "block";
-
-        setTimeout(() => {
-            enterFullscreen();
-        }, 200);
-
-        setTimeout(() => {
-            warning.style.display = "none";
-        }, 2000);
-
+window.addEventListener(
+    "load",
+    () => {
+        setTimeout(
+            enterFullscreen,
+            500
+        );
     }
+);
 
-});
+document.addEventListener(
+    "fullscreenchange",
+    async () => {
 
-document.addEventListener("keydown", function(e){
+        if(
+            !document.fullscreenElement &&
+            !allowExit
+        ){
 
-    const k = e.key.toLowerCase();
+            overlay.style.display =
+                "flex";
 
-    if(e.key === "F12"){
-        e.preventDefault();
-        e.stopPropagation();
-    }
+            passwordBox.value = "";
+            passwordBox.focus();
 
-    if(e.key === "Escape"){
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    if(e.ctrlKey && e.shiftKey && k === "i"){
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    if(e.ctrlKey && e.shiftKey && k === "j"){
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    if(e.ctrlKey && e.shiftKey && k === "c"){
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    if(e.ctrlKey && k === "u"){
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    if(e.ctrlKey && k === "s"){
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    if(e.ctrlKey && k === "o"){
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-    if(e.ctrlKey && k === "p"){
-        e.preventDefault();
-        e.stopPropagation();
-    }
-
-});
-
-document.addEventListener("contextmenu", function(e){
-    e.preventDefault();
-});
-
-window.addEventListener("beforeunload", function(e){
-    e.preventDefault();
-    e.returnValue = "";
-});
-
-document.body.addEventListener("click", async () => {
-
-    try{
-        document.body.requestPointerLock();
-    }
-    catch(e){}
-
-});
-
-document.addEventListener("pointerlockchange", () => {
-
-    if(document.pointerLockElement === null){
-
-        try{
-            document.body.requestPointerLock();
         }
-        catch(e){}
+
+    }
+);
+
+function checkPassword(){
+
+    if(
+        passwordBox.value === PASSWORD
+    ){
+
+        allowExit = true;
+
+        overlay.style.display =
+            "none";
+
+        msg.innerHTML = "";
+
+        alert(
+            "Fullskjermmodus avsluttet."
+        );
+
+    }
+    else{
+
+        msg.innerHTML =
+            "Feil passord";
+
+        overlay.style.display =
+            "none";
+
+        setTimeout(() => {
+
+            enterFullscreen();
+
+        }, 100);
 
     }
 
-});
+}
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        const k =
+            e.key.toLowerCase();
+
+        if(
+            e.key === "F12" ||
+            e.key === "Escape"
+        ){
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        if(
+            e.ctrlKey &&
+            e.shiftKey &&
+            (
+                k === "i" ||
+                k === "j" ||
+                k === "c"
+            )
+        ){
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        if(
+            e.ctrlKey &&
+            (
+                k === "u" ||
+                k === "s" ||
+                k === "o" ||
+                k === "p"
+            )
+        ){
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+    }
+);
+
+document.addEventListener(
+    "contextmenu",
+    function(e){
+        e.preventDefault();
+    }
+);
+
+window.addEventListener(
+    "beforeunload",
+    function(e){
+        e.preventDefault();
+        e.returnValue = "";
+    }
+);
 
 </script>
 
