@@ -125,6 +125,28 @@ button{
 
 <script>
 
+window.addEventListener("blur", () => {
+
+    alert(
+      "Du forlot editoren!"
+    );
+
+});
+let violations = 0;
+
+window.addEventListener("blur", () => {
+
+    violations++;
+
+    if(violations >= 3){
+
+        document.body.innerHTML =
+        "<h1>EDITOR LÅST</h1>";
+
+    }
+
+});
+    
 const PASSWORD = "1234";
 
 const editor = document.getElementById("editor");
