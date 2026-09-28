@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+    
 <title>Jukeboks</title>
 
 <style>
@@ -14,7 +17,7 @@
 
 body{
     margin:0;
-    height:100vh;
+    height:100dvh;
     overflow:hidden;
     background:#111;
     color:white;
@@ -79,6 +82,22 @@ body{
     background:#0d8f3f;
 }
 
+#modeButton{
+    margin-top:15px;
+    padding:12px 20px;
+    border:none;
+    border-radius:12px;
+    background:#0066cc;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+#modeButton:hover{
+    background:#0080ff;
+}
+``    
+    
 </style>
 </head>
 
@@ -93,6 +112,10 @@ body{
     <div id="status">
         Ventesang spiller
     </div>
+    
+    <button id="modeButton">
+        Spill ventemusikk
+    </button>
 
 </div>
 
@@ -103,6 +126,11 @@ body{
 const waitingSong  = "ventesang.mp3";
 const waitingCover = "ventesang.jpg";
 
+const TOTAL_SONGS = 20;
+
+let autoplay = false;
+let currentSong = null;
+    
 const player = new Audio();
 const waitingPlayer = new Audio(waitingSong);
 
@@ -111,6 +139,31 @@ waitingPlayer.loop = true;
 const cover  = document.getElementById("cover");
 const status = document.getElementById("status");
 
+const modeButton =
+    document.getElementById("modeButton");
+
+function updateModeButton()
+{
+    if(autoplay)
+    {
+        modeButton.textContent = "Autoplay";
+        modeButton.style.background = "#0d8f3f";
+    }
+    else
+    {
+        modeButton.textContent = "Spill ventemusikk";
+        modeButton.style.background = "#0066cc";
+    }
+}
+
+modeButton.onclick = () =>
+{
+    autoplay = !autoplay;
+    updateModeButton();
+};
+
+updateModeButton();
+    
 function setCover(image)
 {
     cover.style.backgroundImage =
@@ -149,6 +202,8 @@ function playSong(songNumber)
 
     player.src =
         `sang${songNumber}.mp3`;
+    
+    currentSong = songNumber;
 
     player.play();
 
@@ -172,8 +227,26 @@ function playSong(songNumber)
 
 player.addEventListener(
     "ended",
-    startWaitingSong
-);
+    () =>
+    {
+        if(autoplay)
+        {
+            let nextSong =
+                currentSong + 1;
+
+            if(nextSong > TOTAL_SONGS)
+            {
+                nextSong = 1;
+            }
+
+            playSong(nextSong);
+        }
+        else
+        {
+            startWaitingSong();
+        }
+    }
+);    
 
 const leftPanel =
     document.getElementById(
@@ -229,6 +302,13 @@ for(let i=11;i<=20;i++)
     rightPanel.appendChild(btn);
 }
 
+document.addEventListener("click", () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen()
+            .catch(() => {});
+    }
+}, { once: true });
+    
 startWaitingSong();
 
 </script>
