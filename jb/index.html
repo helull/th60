@@ -105,12 +105,80 @@ body{
     color:white;
     text-shadow:0 0 10px rgba(255,255,255,0.4);
 }
+
+#rotateWarning{
+    display:none;
+
+    position:fixed;
+    inset:0;
+
+    background:#111;
+    color:white;
+
+    font-size:36px;
+    font-weight:bold;
+
+    justify-content:center;
+    align-items:center;
+
+    z-index:9999;
+}
+
+@media (max-width: 900px)
+{
+    body
+    {
+        grid-template-columns:
+            1fr
+            220px
+            1fr;
+    }
+
+    #cover
+    {
+        width:180px;
+        height:180px;
+    }
+
+    #title
+    {
+        font-size:24px;
+    }
+
+    #status
+    {
+        font-size:16px;
+    }
+
+    .song
+    {
+        font-size:14px;
+        padding:4px;
+    }
+
+    #leftPanel,
+    #rightPanel
+    {
+        gap:5px;
+        padding:5px;
+    }
+
+    #modeButton
+    {
+        font-size:14px;
+        padding:8px 12px;
+    }
+}
     
 </style>
 </head>
 
 <body>
 
+<div id="rotateWarning">
+    Roter telefonen til liggende modus
+</div>
+    
 <div id="leftPanel"></div>
 
 <div id="centerPanel">
@@ -133,6 +201,30 @@ body{
 
 <script>
 
+function checkOrientation()
+{
+    const warning =
+        document.getElementById(
+            "rotateWarning"
+        );
+
+    if(window.innerHeight > window.innerWidth)
+    {
+        warning.style.display = "flex";
+    }
+    else
+    {
+        warning.style.display = "none";
+    }
+}
+
+window.addEventListener(
+    "resize",
+    checkOrientation
+);
+
+checkOrientation();
+    
 const songTitles = [
     "Borghild",
     "Feil sie ta Mjøsa",
@@ -155,6 +247,22 @@ const songTitles = [
     "To par gebiss",
     "Dorull"
 ];
+
+async function lockLandscape()
+{
+    try
+    {
+        if(screen.orientation)
+        {
+            await screen.orientation.lock("landscape");
+        }
+    }
+    catch(e)
+    {
+        console.log("Kan ikke låse orientering");
+    }
+}
+
     
 const waitingSong  = "ventesang.mp3";
 const waitingCover = "ventesang.jpg";
@@ -335,12 +443,21 @@ for(let i=11;i<=20;i++)
     rightPanel.appendChild(btn);
 }
 
-document.addEventListener("click", () => {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen()
-            .catch(() => {});
+document.addEventListener("click", async () =>
+{
+    try
+    {
+        if(!document.fullscreenElement)
+        {
+            await document.documentElement.requestFullscreen();
+        }
+
+        await lockLandscape();
     }
-}, { once: true });
+    catch(e){}
+},
+{ once:true });
+
     
 startWaitingSong();
 
