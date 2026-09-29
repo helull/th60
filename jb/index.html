@@ -207,7 +207,7 @@ body{
 
 <script>
 
-function checkOrientation()
+/* function checkOrientation()
 {
     const warning =
         document.getElementById(
@@ -230,6 +230,26 @@ window.addEventListener(
 );
 
 checkOrientation();
+*/
+
+function checkOrientation() {
+    const warning = document.getElementById("rotateWarning");
+
+    const landscape =
+        window.matchMedia("(orientation: landscape)").matches;
+
+    warning.style.display = landscape ? "none" : "flex";
+}
+
+window.addEventListener("resize", checkOrientation);
+window.addEventListener("orientationchange", checkOrientation);
+
+document.addEventListener("visibilitychange", checkOrientation);
+
+setInterval(checkOrientation, 500);
+
+checkOrientation();
+
     
 const songTitles = [
     "Borghild",
