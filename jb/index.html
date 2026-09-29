@@ -113,14 +113,17 @@ body{
     position:fixed;
     inset:0;
 
-    background:#111;
+    background:rgba(0,0,0,0.90);
     color:white;
 
-    font-size:36px;
+    font-size:28px;
     font-weight:bold;
 
     justify-content:center;
     align-items:center;
+    text-align:center;
+
+    padding:30px;
 
     z-index:9999;
 }
@@ -175,9 +178,11 @@ body{
 </head>
 
 <body>
-
+    
 <div id="rotateWarning">
-    Roter telefonen til liggende modus
+    📱<br><br>
+    Roter telefonen til liggende modus<br><br>
+    for å bruke Vazelina-jukeboksen
 </div>
     
 <div id="leftPanel"></div>
@@ -248,21 +253,6 @@ const songTitles = [
     "To par gebiss",
     "Dorull"
 ];
-
-async function lockLandscape()
-{
-    try
-    {
-        if(screen.orientation)
-        {
-            await screen.orientation.lock("landscape");
-        }
-    }
-    catch(e)
-    {
-        console.log("Kan ikke låse orientering");
-    }
-}
     
 const waitingSong  = "ventesang.mp3";
 const waitingCover = "ventesang.jpg";
@@ -456,8 +446,6 @@ document.addEventListener(
                     .documentElement
                     .requestFullscreen();
             }
-
-            await lockLandscape();
 
             checkOrientation();
         }
