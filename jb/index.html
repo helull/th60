@@ -18,7 +18,7 @@
 body{
     margin:0;
     height:100dvh;
-    overflow:hidden;
+    overflow:auto;
     background:#111;
     color:white;
     font-family:Arial,sans-serif;
@@ -33,6 +33,7 @@ body{
     grid-template-columns:1fr 1fr;
     gap:10px;
     padding:10px;
+    overflow-y:auto;
 }
 
 #centerPanel{
@@ -247,7 +248,7 @@ const songTitles = [
     "To par gebiss",
     "Dorull"
 ];
-
+/*
 async function lockLandscape()
 {
     try
@@ -261,6 +262,11 @@ async function lockLandscape()
     {
         console.log("Kan ikke låse orientering");
     }
+}*/
+
+if(window.innerHeight > window.innerWidth)
+{
+    <div>ROTER telefonen til liggende modus...</div>
 }
 
     
@@ -443,24 +449,44 @@ for(let i=11;i<=20;i++)
     rightPanel.appendChild(btn);
 }
 
-document.addEventListener("click", async () =>
-{
-    try
-    {
-        if(!document.fullscreenElement)
-        {
-            await document.documentElement.requestFullscreen();
-        }
 
-        await lockLandscape();
-    }
-    catch(e){}
-},
-{ once:true });
+document.addEventListener(
+    "click",
+    async () =>
+    {
+        try
+        {
+            if(!document.fullscreenElement)
+            {
+                await document
+                    .documentElement
+                    .requestFullscreen();
+            }
+
+            await lockLandscape();
+
+            checkOrientation();
+        }
+        catch(e){}
+    },
+    { once:true }
+);
 
     
 startWaitingSong();
 
+window.addEventListener(
+    "resize",
+    checkOrientation
+);
+
+window.addEventListener(
+    "orientationchange",
+    checkOrientation
+);
+
+checkOrientation();
+    
 </script>
 
 </body>
