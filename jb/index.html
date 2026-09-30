@@ -236,6 +236,13 @@ function checkOrientation() {
         screenHeight: screen.height
     });
 
+    document.getElementById("rotateWarning").innerHTML =
+        "landscape=" + landscape +
+        "<br>innerWidth=" + window.innerWidth +
+        "<br>innerHeight=" + window.innerHeight +
+        "<br>screenWidth=" + screen.width +
+        "<br>screenHeight=" + screen.height;    
+    
     document.getElementById("status").innerHTML =
         "landscape=" + landscape +
         "<br>innerWidth=" + window.innerWidth +
