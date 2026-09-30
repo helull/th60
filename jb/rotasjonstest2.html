@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+    
+<title>Jukeboks</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    overflow:auto;
+    background:#111;
+    color:white;
+    font-family:Arial,sans-serif;
+
+    display:grid;
+    grid-template-columns:1fr 300px 1fr;
+}
+
+#leftPanel,
+#rightPanel{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    padding:10px;
+    overflow-y:auto;
+}
+
+#centerPanel{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+#cover{
+    width:260px;
+    height:260px;
+    border-radius:20px;
+    background-size:cover;
+    background-position:center;
+    background-image:url('ventesang.jpg');
+
+    box-shadow:0 0 25px rgba(255,255,255,.25);
+}
+
+#status{
+    margin-top:20px;
+    text-align:;
+    font-size:24px;
+}
+
+.song{
+    border:none;
+    border-radius:15px;
+
+    background:#2a2a2a;
+    color:white;
+
+    font-size:22px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.song:hover{
+    background:#444;
+}
+
+.song.active{
+    background:#0d8f3f;
+}
+
+#modeButton{
+    margin-top:15px;
+    padding:12px 20px;
+    border:none;
+    border-radius:12px;
+    background:#0066cc;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+#modeButton:hover{
+    background:#0080ff;
+}
+    
+#title{
+    margin:0 0 20px 0;
+    font-size:42px;
+    font-weight:bold;
+    text-align:center;
+    color:white;
+    text-shadow:0 0 10px rgba(255,255,255,0.4);
+}
+
+#rotateWarning{
+    display:none;
+
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,0.90);
+    color:white;
+
+    font-size:28px;
+    font-weight:bold;
+
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+
+    padding:30px;
+
+    z-index:9999;
+}
+
+@media (max-width: 900px)
+{
+    body
+    {
+        grid-template-columns:
+            1fr
+            220px
+            1fr;
+    }
+
+    #cover
+    {
+        width:180px;
+        height:180px;
+    }
+
+    #title
+    {
+        font-size:24px;
+    }
+
+    #status
+    {
+        font-size:16px;
+    }
+
+    .song
+    {
+        font-size:14px;
+        padding:4px;
+    }
+
+    #leftPanel,
+    #rightPanel
+    {
+        gap:5px;
+        padding:5px;
+    }
+
+    #modeButton
+    {
+        font-size:14px;
+        padding:8px 12px;
+    }
+}
+    
+</style>
+</head>
+
+<body>
+    
+<div id="rotateWarning">
+    📱<br><br>
+    Roter telefonen til liggende modus<br><br>
+    for å bruke Vazelina-jukeboksen
+</div>
+    
+<div id="leftPanel"></div>
+
+<div id="centerPanel">
+
+    <h1 id="title">Vazelina jukeboks</h1>
+    
+    <div id="cover"></div>
+
+    <div id="status">
+        Ventesang spiller
+    </div>
+    
+    <button id="modeButton">
+        Spill ventemusikk
+    </button>
+
+</div>
+
+<div id="rightPanel"></div>
+
+<script>
+
+function isLandscape() {
+    console.log (screen.orientation)
+    document.getElementById("rotateWarning").innerHTML = screen.orientation;
+    
+    document.getElementById("status").innerHTML = screen.orientation;
+
+    if (screen.orientation) {
+        return screen.orientation.type.startsWith("landscape");
+    }
+
+    return window.innerWidth > window.innerHeight;
+}
+
+function checkOrientation() {
+
+    const warning =
+        document.getElementById("rotateWarning");
+
+    warning.style.display =
+        isLandscape()
+            ? "none"
+            : "flex";
+}
+
+window.addEventListener("resize", checkOrientation);
+window.addEventListener("orientationchange", checkOrientation);
+
+document.addEventListener("visibilitychange", checkOrientation);    
+setInterval(checkOrientation, 500);
+
+checkOrientation();
+
+    
+const songTitles = [
+    "Borghild",
+    "Feil sie ta Mjøsa",
+    "Musikk tel arbe'",
+    "Gi meg fri i kveld",
+    "Skinnmagre høner",
+    "På magan bak en sten",
+    "Surfbrett",
+    "På Gjøvik",
+    "Knekkebrød",
+    "Vond rygg, såre knoker",
+    "Ågot Stang",
+    "Blå lys",
+    "Bomull i øra",
+    "Traktor med henger",
+    "Ferje på Mjøsa",
+    "Lada tel Hønefoss",
+    "Spikre paller",
+    "11 år uten kvinnfolk",
+    "To par gebiss",
+    "Dorull"
+];
+    
+const waitingSong  = "ventesang.mp3";
+const waitingCover = "ventesang.jpg";
+
+const TOTAL_SONGS = 20;
+
+let autoplay = false;
+let currentSong = null;
+    
+const player = new Audio();
+const waitingPlayer = new Audio(waitingSong);
+
+waitingPlayer.loop = true;
+
+const cover  = document.getElementById("cover");
+const status = document.getElementById("status");
+
+const modeButton =
+    document.getElementById("modeButton");
+
+function updateModeButton()
+{
+    if(autoplay)
+    {
+        modeButton.textContent = "Autoplay";
+        modeButton.style.background = "#0d8f3f";
+    }
+    else
+    {
+        modeButton.textContent = "Spill ventemusikk";
+        modeButton.style.background = "#0066cc";
+    }
+}
+
+modeButton.onclick = () =>
+{
+    autoplay = !autoplay;
+    updateModeButton();
+};
+
+updateModeButton();
+    
+function setCover(image)
+{
+    cover.style.backgroundImage =
+        `url('${image}')`;
+}
+
+function clearSelection()
+{
+    document
+        .querySelectorAll(".song")
+        .forEach(btn =>
+            btn.classList.remove("active"));
+}
+
+function startWaitingSong()
+{
+    player.pause();
+
+    waitingPlayer.currentTime = 0;
+    waitingPlayer.play();
+
+    setCover(waitingCover);
+
+    status.textContent =
+        "Ventesang spiller";
+
+    clearSelection();
+}
+
+function playSong(songNumber)
+{
+    waitingPlayer.pause();
+
+    player.pause();
+    player.currentTime = 0;
+
+    player.src =
+        `sang${songNumber}.mp3`;
+    
+    currentSong = songNumber;
+
+    player.play();
+
+    setCover(
+        `sang${songNumber}.jpg`
+    );
+
+    status.textContent =
+        songTitles[songNumber - 1];
+
+    clearSelection();
+
+    document
+        .getElementById(
+            "song"+songNumber
+        )
+        .classList.add(
+            "active"
+        );
+}
+
+player.addEventListener(
+    "ended",
+    () =>
+    {
+        if(autoplay)
+        {
+            let nextSong =
+                currentSong + 1;
+
+            if(nextSong > TOTAL_SONGS)
+            {
+                nextSong = 1;
+            }
+
+            playSong(nextSong);
+        }
+        else
+        {
+            startWaitingSong();
+        }
+    }
+);    
+
+const leftPanel =
+    document.getElementById(
+        "leftPanel"
+    );
+
+const rightPanel =
+    document.getElementById(
+        "rightPanel"
+    );
+
+for(let i=1;i<=10;i++)
+{
+    const btn =
+        document.createElement(
+            "button"
+        );
+
+    btn.className =
+        "song";
+
+    btn.id =
+        "song"+i;
+
+    btn.textContent =
+        "Sang "+i;
+
+    btn.onclick =
+        () => playSong(i);
+
+    leftPanel.appendChild(btn);
+}
+
+for(let i=11;i<=20;i++)
+{
+    const btn =
+        document.createElement(
+            "button"
+        );
+
+    btn.className =
+        "song";
+
+    btn.id =
+        "song"+i;
+
+    btn.textContent =
+        "Sang "+i;
+
+    btn.onclick =
+        () => playSong(i);
+
+    rightPanel.appendChild(btn);
+}
+
+
+document.addEventListener(
+    "click",
+    async () =>
+    {
+        try
+        {
+            if(!document.fullscreenElement)
+            {
+                await document
+                    .documentElement
+                    .requestFullscreen();
+            }
+
+            checkOrientation();
+        }
+        catch(e){}
+    },
+    { once:true }
+);
+
+window.addEventListener(
+    "load",
+    checkOrientation
+);
+    
+startWaitingSong();
+
+window.addEventListener(
+    "resize",
+    checkOrientation
+);
+
+window.addEventListener(
+    "orientationchange",
+    checkOrientation
+);
+
+checkOrientation();
+    
+</script>
+
+</body>
+</html>
