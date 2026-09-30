@@ -207,39 +207,41 @@ body{
 
 <script>
 
+function visDiagnose() {
+    document.getElementById("status").innerHTML = `
+        <table border="1" cellpadding="4">
+            <tr><td>orientationType</td><td>${screen.orientation?.type}</td></tr>
+            <tr><td>orientationAngle</td><td>${screen.orientation?.angle}</td></tr>
+            <tr><td>windowOrientation</td><td>${window.orientation}</td></tr>
+            <tr><td>innerWidth</td><td>${window.innerWidth}</td></tr>
+            <tr><td>innerHeight</td><td>${window.innerHeight}</td></tr>
+            <tr><td>screenWidth</td><td>${screen.width}</td></tr>
+            <tr><td>screenHeight</td><td>${screen.height}</td></tr>
+            <tr><td>visualWidth</td><td>${visualViewport?.width}</td></tr>
+            <tr><td>visualHeight</td><td>${visualViewport?.height}</td></tr>
+            <tr><td>mediaLandscape</td><td>${matchMedia("(orientation: landscape)").matches}</td></tr>
+        </table>
+    `;
+
+     document.getElementById("rotateWarning").innerHTML = `
+        <table border="1" cellpadding="4">
+            <tr><td>orientationType</td><td>${screen.orientation?.type}</td></tr>
+            <tr><td>orientationAngle</td><td>${screen.orientation?.angle}</td></tr>
+            <tr><td>windowOrientation</td><td>${window.orientation}</td></tr>
+            <tr><td>innerWidth</td><td>${window.innerWidth}</td></tr>
+            <tr><td>innerHeight</td><td>${window.innerHeight}</td></tr>
+            <tr><td>screenWidth</td><td>${screen.width}</td></tr>
+            <tr><td>screenHeight</td><td>${screen.height}</td></tr>
+            <tr><td>visualWidth</td><td>${visualViewport?.width}</td></tr>
+            <tr><td>visualHeight</td><td>${visualViewport?.height}</td></tr>
+            <tr><td>mediaLandscape</td><td>${matchMedia("(orientation: landscape)").matches}</td></tr>
+        </table>
+    `;
+    
+}
+
 function isLandscape() {
 
-/* ------------ */
-document.getElementById("status").innerHTML =
-    "orientation: " +
-    (screen.orientation
-        ? screen.orientation.type
-        : "ikke støttet") +
-    "<br>" +
-    "matchMedia: " +
-    window.matchMedia("(orientation: landscape)").matches +
-    "<br>" +
-    "innerWidth: " +
-    window.innerWidth +
-    "<br>" +
-    "innerHeight: " +
-    window.innerHeight;
-
-    document.getElementById("rotateWarning").innerHTML =
-    "orientation: " +
-    (screen.orientation
-        ? screen.orientation.type
-        : "ikke støttet") +
-    "<br>" +
-    "matchMedia: " +
-    window.matchMedia("(orientation: landscape)").matches +
-    "<br>" +
-    "innerWidth: " +
-    window.innerWidth +
-    "<br>" +
-    "innerHeight: " +
-    window.innerHeight;
-/* -------------------- */
     if (screen.orientation) {
         return screen.orientation.type.startsWith("landscape");
     }
@@ -248,6 +250,8 @@ document.getElementById("status").innerHTML =
 }
 
 function checkOrientation() {
+    
+    visDiagnose();
 
     const warning =
         document.getElementById("rotateWarning");
