@@ -207,39 +207,16 @@ body{
 
 <script>
 
-function visDiagnose() {
-    document.getElementById("status").innerHTML = `
-        <table border="1" cellpadding="4">
-            <tr><td>orientationType</td><td>${screen.orientation?.type}</td></tr>
-            <tr><td>orientationAngle</td><td>${screen.orientation?.angle}</td></tr>
-            <tr><td>windowOrientation</td><td>${window.orientation}</td></tr>
-            <tr><td>innerWidth</td><td>${window.innerWidth}</td></tr>
-            <tr><td>innerHeight</td><td>${window.innerHeight}</td></tr>
-            <tr><td>screenWidth</td><td>${screen.width}</td></tr>
-            <tr><td>screenHeight</td><td>${screen.height}</td></tr>
-            <tr><td>visualWidth</td><td>${visualViewport?.width}</td></tr>
-            <tr><td>visualHeight</td><td>${visualViewport?.height}</td></tr>
-            <tr><td>mediaLandscape</td><td>${matchMedia("(orientation: landscape)").matches}</td></tr>
-        </table>
+setInterval(() => {
+    document.getElementById("rotateWarning").innerHTML = `
+        outerWidth: ${window.outerWidth}<br>
+        outerHeight: ${window.outerHeight}<br>
+        pageXOffset: ${window.pageXOffset}<br>
+        pageYOffset: ${window.pageYOffset}<br>
+        devicePixelRatio: ${window.devicePixelRatio}<br>
     `;
-
-     document.getElementById("rotateWarning").innerHTML = `
-        <table border="1" cellpadding="4">
-            <tr><td>orientationType</td><td>${screen.orientation?.type}</td></tr>
-            <tr><td>orientationAngle</td><td>${screen.orientation?.angle}</td></tr>
-            <tr><td>windowOrientation</td><td>${window.orientation}</td></tr>
-            <tr><td>innerWidth</td><td>${window.innerWidth}</td></tr>
-            <tr><td>innerHeight</td><td>${window.innerHeight}</td></tr>
-            <tr><td>screenWidth</td><td>${screen.width}</td></tr>
-            <tr><td>screenHeight</td><td>${screen.height}</td></tr>
-            <tr><td>visualWidth</td><td>${visualViewport?.width}</td></tr>
-            <tr><td>visualHeight</td><td>${visualViewport?.height}</td></tr>
-            <tr><td>mediaLandscape</td><td>${matchMedia("(orientation: landscape)").matches}</td></tr>
-        </table>
-    `;
+}, 1000);
     
-}
-
 function isLandscape() {
 
     if (screen.orientation) {
@@ -251,8 +228,6 @@ function isLandscape() {
 
 function checkOrientation() {
     
-    visDiagnose();
-
     const warning =
         document.getElementById("rotateWarning");
 
