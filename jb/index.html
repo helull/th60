@@ -207,31 +207,7 @@ body{
 
 <script>
 
-/* function checkOrientation()
-{
-    const warning =
-        document.getElementById(
-            "rotateWarning"
-        );
-
-    if(window.innerHeight > window.innerWidth)
-    {
-        warning.style.display = "flex";
-    }
-    else
-    {
-        warning.style.display = "none";
-    }
-}
-
-window.addEventListener(
-    "resize",
-    checkOrientation
-);
-
-checkOrientation();
-*/
-
+/*    
 function checkOrientation() {
     const warning = document.getElementById("rotateWarning");
 
@@ -245,7 +221,32 @@ window.addEventListener("resize", checkOrientation);
 window.addEventListener("orientationchange", checkOrientation);
 
 document.addEventListener("visibilitychange", checkOrientation);
+*/
 
+function checkOrientation() {
+
+    const landscape =
+        window.matchMedia("(orientation: landscape)").matches;
+
+    console.log({
+        landscape,
+        innerWidth: window.innerWidth,
+        innerHeight: window.innerHeight,
+        screenWidth: screen.width,
+        screenHeight: screen.height
+    });
+
+    document.getElementById("status").innerHTML =
+        "landscape=" + landscape +
+        "<br>innerWidth=" + window.innerWidth +
+        "<br>innerHeight=" + window.innerHeight +
+        "<br>screenWidth=" + screen.width +
+        "<br>screenHeight=" + screen.height;
+
+    document.getElementById("rotateWarning").style.display =
+        landscape ? "none" : "flex";
+}
+    
 setInterval(checkOrientation, 500);
 
 checkOrientation();
