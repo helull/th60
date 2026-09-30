@@ -224,6 +224,21 @@ document.getElementById("status").innerHTML =
     "<br>" +
     "innerHeight: " +
     window.innerHeight;
+
+    document.getElementById("rotateWarning").innerHTML =
+    "orientation: " +
+    (screen.orientation
+        ? screen.orientation.type
+        : "ikke støttet") +
+    "<br>" +
+    "matchMedia: " +
+    window.matchMedia("(orientation: landscape)").matches +
+    "<br>" +
+    "innerWidth: " +
+    window.innerWidth +
+    "<br>" +
+    "innerHeight: " +
+    window.innerHeight;
 /* -------------------- */
     if (screen.orientation) {
         return screen.orientation.type.startsWith("landscape");
