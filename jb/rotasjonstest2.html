@@ -208,11 +208,23 @@ body{
 <script>
 
 function isLandscape() {
-    console.log (screen.orientation)
-    document.getElementById("rotateWarning").innerHTML = screen.orientation;
-    
-    document.getElementById("status").innerHTML = screen.orientation;
 
+/* ------------ */
+document.getElementById("status").innerHTML =
+    "orientation: " +
+    (screen.orientation
+        ? screen.orientation.type
+        : "ikke støttet") +
+    "<br>" +
+    "matchMedia: " +
+    window.matchMedia("(orientation: landscape)").matches +
+    "<br>" +
+    "innerWidth: " +
+    window.innerWidth +
+    "<br>" +
+    "innerHeight: " +
+    window.innerHeight;
+/* -------------------- */
     if (screen.orientation) {
         return screen.orientation.type.startsWith("landscape");
     }
